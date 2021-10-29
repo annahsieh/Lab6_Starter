@@ -1,7 +1,8 @@
 class RecipeCard extends HTMLElement {
   constructor() {
     // Part 1 Expose - TODO
-
+    super();
+    let shadow = this.attachShadow({mode: 'open'});
     // You'll want to attach the shadow DOM here
   }
 
@@ -18,7 +19,6 @@ class RecipeCard extends HTMLElement {
       a {
         text-decoration: none;
       }
-
       a:hover {
         text-decoration: underline;
       }
@@ -34,7 +34,6 @@ class RecipeCard extends HTMLElement {
         padding: 0 16px 16px 16px;
         width: 178px;
       }
-
       div.rating {
         align-items: center;
         column-gap: 5px;
@@ -47,7 +46,6 @@ class RecipeCard extends HTMLElement {
         object-fit: scale-down;
         width: 78px;
       }
-
       article > img {
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
@@ -56,7 +54,6 @@ class RecipeCard extends HTMLElement {
         margin-left: -16px;
         width: calc(100% + 32px);
       }
-
       p.ingredients {
         height: 32px;
         line-height: 16px;
@@ -67,7 +64,6 @@ class RecipeCard extends HTMLElement {
       p.organization {
         color: black !important;
       }
-
       p.title {
         display: -webkit-box;
         font-size: 16px;
@@ -77,13 +73,12 @@ class RecipeCard extends HTMLElement {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
-
       p:not(.title), span, time {
         color: #70757A;
         font-size: 12px;
       }
     `;
-    styleElem.innerHTML = style;
+    styleElem.innerHTML = styles;
 
     // Here's the root element that you'll want to attach all of your other elements to
     const card = document.createElement('article');
@@ -100,6 +95,87 @@ class RecipeCard extends HTMLElement {
     // created in the constructor()
 
     // Part 1 Expose - TODO
+    const thumbnail = document.createElement('img');
+    let thumbnailSrc = searchForKey(data, 'thumbnailUrl');
+    console.log(thumbnailSrc);
+    thumbnail.setAttribute('src', thumbnailSrc);
+    let recipeTitle = searchForKey(data, 'headline');
+    thumbnail.setAttribute('alt', recipeTitle);
+    card.appendChild(thumbnail);
+
+    const title = document.createElement('p');
+    title.classList.add('title');
+    const titleLink = document.createElement('a');
+    let articleLink = getUrl(data);
+    titleLink.setAttribute('href', articleLink);
+    titleLink.textContent = recipeTitle;
+    title.appendChild(titleLink);
+    card.appendChild(title);
+
+    const org = document.createElement('p');
+    org.classList.add('organization');
+    let organization = getOrganization(data);
+    org.textContent = organization;
+    card.appendChild(org);
+
+    const rating = document.createElement('div');
+    rating.classList.add('rating');
+    const reviewStars = document.createElement('span');
+    let ratingVal = searchForKey(data, 'ratingValue');
+    if (ratingVal == undefined) {
+      reviewStars.textContent = 'No Reviews';
+    }
+    else {
+      reviewStars.textContent = ratingVal;
+      const ratingStars = document.createElement('img');
+      let stars = Math.round(ratingVal);
+      switch (stars) {
+        case 0:
+          ratingStars.setAttribute('src', '/assets/images/icons/0-star.svg');
+          ratingStars.setAttribute('alt', '0 stars');
+          break;
+        case 1:
+          ratingStars.setAttribute('src', '/assets/images/icons/1-star.svg');
+          ratingStars.setAttribute('alt', '1 star');
+          break;
+        case 2:
+          ratingStars.setAttribute('src', '/assets/images/icons/2-star.svg');
+          ratingStars.setAttribute('alt', '2 stars');
+          break;
+        case 3:
+          ratingStars.setAttribute('src', '/assets/images/icons/3-star.svg');
+          ratingStars.setAttribute('alt', '3 stars');
+          break;
+        case 4:
+          ratingStars.setAttribute('src', '/assets/images/icons/4-star.svg');
+          ratingStars.setAttribute('alt', '4 stars');
+          break;      
+        case 5:
+          ratingStars.setAttribute('src', '/assets/images/icons/5-star.svg');
+          ratingStars.setAttribute('alt', '5 stars');
+      }
+      const numReviews = document.createElement('span');
+      let ratingCount = searchForKey(data, 'ratingCount');
+      numReviews.textContent = ratingCount;
+      rating.appendChild(ratingStars);
+      rating.appendChild(numReviews);
+    }
+    rating.appendChild(reviewStars);
+    
+    const recipeTime = document.createElement('time');
+    let time = convertTime(searchForKey(data, 'totalTime'));
+    recipeTime.textContent = time;
+    card.appendChild(recipeTime);
+
+    const ingrList = document.createElement('p');
+    ingrList.classList.add('ingredients');
+    let recipeIngr = createIngredientList(searchForKey(data, 'recipeIngredient'));
+    ingrList.textContent = recipeIngr;
+    card.appendChild(ingrList);  
+    
+    
+    this.shadowRoot.appendChild(styleElem);
+    this.shadowRoot.appendChild(card);
   }
 }
 
