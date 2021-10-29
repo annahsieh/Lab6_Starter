@@ -59,9 +59,7 @@ async function fetchRecipes() {
               if(recipes.length != Object.entries(recipeData).length) {
                 reject(false);
               }
-              else {
-                resolve(true);
-              }
+              resolve(true);
             }
           });
     }
