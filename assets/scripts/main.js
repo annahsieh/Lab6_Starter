@@ -54,7 +54,7 @@ async function fetchRecipes() {
             return response.json();
           })
           .then(function(data) {
-            recipeData[recipe] = data
+            recipeData[recipe] = data;
             if(i == (recipes.length - 1)) {
               if(recipes.length != Object.entries(recipeData).length) {
                 reject(false);
