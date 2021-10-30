@@ -28,6 +28,7 @@ async function init() {
     return;
   };
   // Add the first three recipe cards to the page
+  console.log(recipeData);
   createRecipeCards();
   // Make the "Show more" button functional
   bindShowMore();
@@ -49,18 +50,16 @@ async function fetchRecipes() {
     for (let i = 0; i < recipes.length; i++) {
       let recipe = recipes[i];
       fetch(recipe)
-          .then(function(response) {
-            if (!response.ok) reject(false);
-            return response.json();
-          })
+          .then(response => response.json())
           .then(function(data) {
-            recipeData[recipe] = data;
-            if(i == (recipes.length - 1)) {
-              if(recipes.length != Object.entries(recipeData).length) {
-                reject(false);
-              }
+            recipeData[i] = data;
+            if(recipes.length == Object.entries(recipeData).length) {
               resolve(true);
-            }
+            }    
+          })
+          .catch(function(error) {
+            console.log('error');
+            reject(false);
           });
     }
   });
@@ -75,10 +74,9 @@ function createRecipeCards() {
 
   // Part 1 Expose - TODO
   const main = document.querySelector('main');
-  let recipes = Object.keys(recipeData);
   for (let i = 0; i < 3; i++) {
     let recipeCard = document.createElement('recipe-card');
-    recipeCard.data = recipeData[recipes[i]];
+    recipeCard.data = recipeData[i];
     main.appendChild(recipeCard);
   }
 }
@@ -92,15 +90,14 @@ function bindShowMore() {
   // in the recipeData object where you stored them/
 
   // Part 2 Explore - TODO
-  const button = document.querySelector('button');
+   const button = document.querySelector('button');
   button.addEventListener('click', function() {
     if(button.textContent == 'Show more') {
       const main = document.querySelector('main');
       button.textContent = 'Show less';
-      let recipes = Object.keys(recipeData);
       for (let i = 3; i < 6; i++) {
         let recipeCard = document.createElement('recipe-card');
-        recipeCard.data = recipeData[recipes[i]];
+        recipeCard.data = recipeData[i];
         main.appendChild(recipeCard);
       }
     }
@@ -111,5 +108,5 @@ function bindShowMore() {
         recipeCards[i].remove();
       }
     }
-  });  
+  });   
 }
