@@ -124,43 +124,45 @@ class RecipeCard extends HTMLElement {
     let ratingVal = searchForKey(data, 'ratingValue');
     if (ratingVal == undefined) {
       reviewStars.textContent = 'No Reviews';
+      rating.appendChild(reviewStars);
     }
     else {
       reviewStars.textContent = ratingVal;
       const ratingStars = document.createElement('img');
       let stars = Math.round(ratingVal);
+      rating.appendChild(reviewStars);
       switch (stars) {
         case 0:
-          ratingStars.setAttribute('src', '/assets/images/icons/0-star.svg');
+          ratingStars.setAttribute('src', 'assets/images/icons/0-star.svg');
           ratingStars.setAttribute('alt', '0 stars');
           break;
         case 1:
-          ratingStars.setAttribute('src', '/assets/images/icons/1-star.svg');
+          ratingStars.setAttribute('src', 'assets/images/icons/1-star.svg');
           ratingStars.setAttribute('alt', '1 star');
           break;
         case 2:
-          ratingStars.setAttribute('src', '/assets/images/icons/2-star.svg');
+          ratingStars.setAttribute('src', 'assets/images/icons/2-star.svg');
           ratingStars.setAttribute('alt', '2 stars');
           break;
         case 3:
-          ratingStars.setAttribute('src', '/assets/images/icons/3-star.svg');
+          ratingStars.setAttribute('src', 'assets/images/icons/3-star.svg');
           ratingStars.setAttribute('alt', '3 stars');
           break;
         case 4:
-          ratingStars.setAttribute('src', '/assets/images/icons/4-star.svg');
+          ratingStars.setAttribute('src', 'assets/images/icons/4-star.svg');
           ratingStars.setAttribute('alt', '4 stars');
           break;      
         case 5:
-          ratingStars.setAttribute('src', '/assets/images/icons/5-star.svg');
+          ratingStars.setAttribute('src', 'assets/images/icons/5-star.svg');
           ratingStars.setAttribute('alt', '5 stars');
       }
       const numReviews = document.createElement('span');
       let ratingCount = searchForKey(data, 'ratingCount');
-      numReviews.textContent = ratingCount;
+      numReviews.textContent = '(' + ratingCount + ')';
       rating.appendChild(ratingStars);
       rating.appendChild(numReviews);
     }
-    rating.appendChild(reviewStars);
+    card.appendChild(rating);
     
     const recipeTime = document.createElement('time');
     let time = convertTime(searchForKey(data, 'totalTime'));
