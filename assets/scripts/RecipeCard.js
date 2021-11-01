@@ -97,7 +97,6 @@ class RecipeCard extends HTMLElement {
     // Part 1 Expose - TODO
     const thumbnail = document.createElement('img');
     let thumbnailSrc = searchForKey(data, 'thumbnailUrl');
-    console.log(thumbnailSrc);
     thumbnail.setAttribute('src', thumbnailSrc);
     let recipeTitle = searchForKey(data, 'headline');
     thumbnail.setAttribute('alt', recipeTitle);
